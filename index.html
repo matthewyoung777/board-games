@@ -473,39 +473,129 @@
 
 <div class="wrap">
     <header>
-        <p class="eyebrow">game night · twenty-one boxes</p>
-        <h1>Everything on <em>the shelf</em></h1>
+        <p class="eyebrow">Board Games</p>
+        <h1>Everything on <em>my shelf</em></h1>
         <p class="lede">
-            Pick a box and say so in chat. Filter by what the night actually
-            looks like — twenty minutes to kill, a full evening, or nine people
-            who all showed up.
+            Pick a box. Filter by what the night actually looks like — twenty
+            minutes to kill, a full evening, or nine people who all showed up.
         </p>
 
         <div class="filters" role="group" aria-label="Filter games">
             <div class="fgroup">
                 <span class="fgroup-label">Length</span>
-                <button class="chip" data-group="length" data-filter="all" aria-pressed="true">Any</button>
-                <button class="chip" data-group="length" data-filter="quick" aria-pressed="false">30 min or less</button>
-                <button class="chip" data-group="length" data-filter="long" aria-pressed="false">45 min or more</button>
+                <button
+                    class="chip"
+                    data-group="length"
+                    data-filter="all"
+                    aria-pressed="true"
+                >
+                    Any
+                </button>
+                <button
+                    class="chip"
+                    data-group="length"
+                    data-filter="quick"
+                    aria-pressed="false"
+                >
+                    30 min or less
+                </button>
+                <button
+                    class="chip"
+                    data-group="length"
+                    data-filter="long"
+                    aria-pressed="false"
+                >
+                    45 min or more
+                </button>
             </div>
             <div class="fgroup">
                 <span class="fgroup-label">Players</span>
-                <button class="chip" data-group="players" data-filter="all" aria-pressed="true">Any</button>
-                <button class="chip" data-group="players" data-filter="crowd" aria-pressed="false">5+ people</button>
-                <button class="chip" data-group="players" data-filter="solo" aria-pressed="false">Solo</button>
+                <button
+                    class="chip"
+                    data-group="players"
+                    data-filter="all"
+                    aria-pressed="true"
+                >
+                    Any
+                </button>
+                <button
+                    class="chip"
+                    data-group="players"
+                    data-filter="crowd"
+                    aria-pressed="false"
+                >
+                    5+ people
+                </button>
+                <button
+                    class="chip"
+                    data-group="players"
+                    data-filter="solo"
+                    aria-pressed="false"
+                >
+                    Solo
+                </button>
             </div>
             <div class="fgroup">
                 <span class="fgroup-label">Type</span>
-                <button class="chip" data-group="type" data-filter="all" aria-pressed="true">Any</button>
-                <button class="chip" data-group="type" data-filter="coop" aria-pressed="false">Co-op</button>
-                <button class="chip" data-group="type" data-filter="competitive" aria-pressed="false">Competitive</button>
+                <button
+                    class="chip"
+                    data-group="type"
+                    data-filter="all"
+                    aria-pressed="true"
+                >
+                    Any
+                </button>
+                <button
+                    class="chip"
+                    data-group="type"
+                    data-filter="coop"
+                    aria-pressed="false"
+                >
+                    Co-op
+                </button>
+                <button
+                    class="chip"
+                    data-group="type"
+                    data-filter="competitive"
+                    aria-pressed="false"
+                >
+                    Competitive
+                </button>
             </div>
             <div class="fgroup">
                 <span class="fgroup-label">Complexity</span>
-                <button class="chip" data-group="complexity" data-filter="all" aria-pressed="true">Any</button>
-                <button class="chip" data-group="complexity" data-filter="light" aria-pressed="false">Light</button>
-                <button class="chip" data-group="complexity" data-filter="medium" aria-pressed="false">Medium</button>
-                <button class="chip" data-group="complexity" data-filter="heavy" aria-pressed="false">Heavy</button>
+                <button
+                    class="chip"
+                    data-group="complexity"
+                    data-filter="all"
+                    aria-pressed="true"
+                >
+                    Any
+                </button>
+                <button
+                    class="chip"
+                    data-group="complexity"
+                    data-filter="light"
+                    aria-pressed="false"
+                >
+                    Light
+                </button>
+                <button
+                    class="chip"
+                    data-group="complexity"
+                    data-filter="medium"
+                    aria-pressed="false"
+                >
+                    Medium
+                </button>
+                <button
+                    class="chip"
+                    data-group="complexity"
+                    data-filter="heavy"
+                    aria-pressed="false"
+                >
+                    Heavy
+                </button>
             </div>
         </div>
         <p class="count" id="count"></p>
@@ -522,17 +612,7 @@
 
     <div class="grid" id="grid"></div>
 
-    <footer>
-        <p>
-            Twenty-one games, <b>1 to 12 players</b>, ten minutes to four hours.
-            Someone else is teaching the rules this time.
-        </p>
-        <p>
-            Adding photos: open this file in any text editor, find the
-            <code>COVERS</code> list near the top of the script, and paste an
-            image link next to the name printed on each tile.
-        </p>
-    </footer>
+    <footer></footer>
 </div>
 
 <script>
