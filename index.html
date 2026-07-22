@@ -71,9 +71,24 @@
 
     .filters {
         display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
         margin: 26px 0 0;
+    }
+    .fgroup {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+    .fgroup-label {
+        font-family: "Oswald", sans-serif;
+        font-size: 12px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #8c7ba8;
+        min-width: 92px;
     }
     .chip {
         font:
@@ -467,18 +482,31 @@
         </p>
 
         <div class="filters" role="group" aria-label="Filter games">
-            <button class="chip" data-filter="all" aria-pressed="true">
-                Everything
-            </button>
-            <button class="chip" data-filter="quick" aria-pressed="false">
-                30 min or less
-            </button>
-            <button class="chip" data-filter="long" aria-pressed="false">
-                45 min or more
-            </button>
-            <button class="chip" data-filter="crowd" aria-pressed="false">
-                5+ people
-            </button>
+            <div class="fgroup">
+                <span class="fgroup-label">Length</span>
+                <button class="chip" data-group="length" data-filter="all" aria-pressed="true">Any</button>
+                <button class="chip" data-group="length" data-filter="quick" aria-pressed="false">30 min or less</button>
+                <button class="chip" data-group="length" data-filter="long" aria-pressed="false">45 min or more</button>
+            </div>
+            <div class="fgroup">
+                <span class="fgroup-label">Players</span>
+                <button class="chip" data-group="players" data-filter="all" aria-pressed="true">Any</button>
+                <button class="chip" data-group="players" data-filter="crowd" aria-pressed="false">5+ people</button>
+                <button class="chip" data-group="players" data-filter="solo" aria-pressed="false">Solo</button>
+            </div>
+            <div class="fgroup">
+                <span class="fgroup-label">Type</span>
+                <button class="chip" data-group="type" data-filter="all" aria-pressed="true">Any</button>
+                <button class="chip" data-group="type" data-filter="coop" aria-pressed="false">Co-op</button>
+                <button class="chip" data-group="type" data-filter="competitive" aria-pressed="false">Competitive</button>
+            </div>
+            <div class="fgroup">
+                <span class="fgroup-label">Complexity</span>
+                <button class="chip" data-group="complexity" data-filter="all" aria-pressed="true">Any</button>
+                <button class="chip" data-group="complexity" data-filter="light" aria-pressed="false">Light</button>
+                <button class="chip" data-group="complexity" data-filter="medium" aria-pressed="false">Medium</button>
+                <button class="chip" data-group="complexity" data-filter="heavy" aria-pressed="false">Heavy</button>
+            </div>
         </div>
         <p class="count" id="count"></p>
     </header>
@@ -770,6 +798,41 @@
         return a.name.localeCompare(b.name);
     });
 
+    /* Complexity (light/medium/heavy) and play style (coop/competitive),
+       keyed by slug and folded into each game's tags for filtering. */
+    const WEIGHT = {
+        everdell: "medium",
+        coup: "light",
+        "dune-imperium": "heavy",
+        "love-letter": "light",
+        "spirit-island": "heavy",
+        "the-chameleon": "light",
+        wingspan: "medium",
+        anomia: "light",
+        "eldritch-horror": "heavy",
+        "one-night-werewolf": "light",
+        catan: "medium",
+        "exploding-kittens": "light",
+        flamecraft: "medium",
+        avalon: "light",
+        quacks: "medium",
+        splendor: "light",
+        "dice-throne": "light",
+        codenames: "light",
+        "castles-of-burgundy": "heavy",
+        "ransom-notes": "light",
+        wavelength: "light",
+    };
+    const MODE = {
+        "spirit-island": "coop",
+        "eldritch-horror": "coop",
+    };
+    GAMES.forEach(function (g) {
+        const s = slugify(g.name);
+        g.tags.push(WEIGHT[s] || "medium");
+        g.tags.push(MODE[s] || "competitive");
+    });
+
     /* BoardGameGeek page for each game, keyed by slug. */
     const BGG = {
         everdell: "https://boardgamegeek.com/boardgame/199792/everdell",
@@ -849,6 +912,12 @@
         quick: "30 min or less",
         long: "45 min or more",
         crowd: "5+ players",
+        solo: "Solo option",
+        coop: "Co-op",
+        competitive: "Competitive",
+        light: "Light",
+        medium: "Medium",
+        heavy: "Heavy",
     };
 
     const EXT = [".jpg", ".png", ".webp", ".jpeg"];
@@ -892,9 +961,6 @@
         const bgg = BGG[gslug] || "";
         const desc = LONG[gslug] || g.blurb;
         const tagChips = g.tags
-            .filter(function (t) {
-                return t !== "solo";
-            })
             .map(function (t) {
                 return "<span class='tag'>" + (TAG_LABEL[t] || t) + "</span>";
             })
@@ -1030,28 +1096,51 @@
         c.querySelector(".cover").appendChild(img);
     });
 
-    function apply(f) {
+    /* One selection per group; results match ALL active groups (AND). */
+    const active = {
+        length: "all",
+        players: "all",
+        type: "all",
+        complexity: "all",
+    };
+
+    function apply() {
+        const wanted = Object.keys(active)
+            .map(function (k) {
+                return active[k];
+            })
+            .filter(function (f) {
+                return f !== "all";
+            });
         let n = 0;
         document.querySelectorAll(".spine, .card").forEach(function (el) {
-            const match =
-                f === "all" || el.dataset.tags.split(" ").indexOf(f) > -1;
+            const tags = el.dataset.tags.split(" ");
+            const match = wanted.every(function (f) {
+                return tags.indexOf(f) > -1;
+            });
             el.classList.toggle("dim", !match);
             if (match && el.classList.contains("card")) n++;
         });
         count.textContent =
-            f === "all"
-                ? "Showing all 21 games"
-                : n + (n === 1 ? " game fits" : " games fit") + " that";
+            wanted.length === 0
+                ? "Showing all " + GAMES.length + " games"
+                : n === 0
+                  ? "Nothing matches that combination"
+                  : n + (n === 1 ? " game fits" : " games fit") + " that";
     }
 
     document.querySelectorAll(".chip").forEach(function (chip) {
         chip.addEventListener("click", function () {
-            document.querySelectorAll(".chip").forEach(function (c) {
-                c.setAttribute("aria-pressed", String(c === chip));
-            });
-            apply(chip.dataset.filter);
+            const group = chip.dataset.group;
+            document
+                .querySelectorAll('.chip[data-group="' + group + '"]')
+                .forEach(function (c) {
+                    c.setAttribute("aria-pressed", String(c === chip));
+                });
+            active[group] = chip.dataset.filter;
+            apply();
         });
     });
 
-    apply("all");
+    apply();
 </script>
