@@ -365,24 +365,27 @@
     }
     .modal-close {
         position: absolute;
+        z-index: 2;
         top: 12px;
         right: 12px;
-        width: 34px;
-        height: 34px;
+        width: 36px;
+        height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border: 0;
+        border: 1.5px solid rgba(246, 239, 228, 0.35);
         border-radius: 999px;
-        background: rgba(0, 0, 0, 0.4);
+        background: rgba(20, 12, 32, 0.82);
         color: var(--cream);
         font-size: 20px;
         line-height: 1;
         cursor: pointer;
-        transition: background 0.18s;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
+        transition: background 0.18s, border-color 0.18s;
     }
     .modal-close:hover {
-        background: rgba(0, 0, 0, 0.65);
+        background: rgba(0, 0, 0, 0.9);
+        border-color: rgba(246, 239, 228, 0.6);
     }
     .modal-close:focus-visible {
         outline: 2px solid #f2b65c;
@@ -980,42 +983,42 @@
     /* Longer descriptions shown in the expanded view, keyed by slug. */
     const LONG = {
         everdell:
-            "A worker-placement and tableau-building game set in the forested valley of Everdell. Across four seasons you send woodland critters out to gather twigs, resin, pebbles, and berries, then spend them to raise constructions and welcome new critters to your ever-growing city. Clever card combinations let a single turn cascade into many, all beneath the famous three-dimensional Evertree. Plays 1–4 and scales down to a tense solo puzzle.",
-        coup: "A razor-sharp game of bluff and deduction set in the dystopian Resistance universe. Everyone starts with two hidden character cards and two coins, and on your turn you may claim any character's power — whether or not you actually hold it — daring the table to call you out. Get caught in a lie and you lose an influence; challenge someone wrongly and you lose one yourself. The last player with a card standing wins, usually inside fifteen loud minutes.",
+            "Woodland critters build a city across four seasons, gathering twigs, resin, pebbles, and berries to raise buildings and recruit new residents. The best turns chain three or four cards together before you even reach for dice. That giant cardboard Evertree in the middle isn't just for show — it's doing a lot of the convincing. Holds up fine solo, too.",
+        coup: "Everyone starts with two hidden characters and two coins, and on your turn you can claim any character's power whether you actually hold it or not. Bluff too hard and someone calls you out; call the wrong person and it costs you instead. Fifteen loud minutes, give or take, and the last person holding a card wins.",
         "dune-imperium":
-            "A blend of worker placement and deckbuilding set on the desert planet Arrakis. Each round you send agents to board spaces to gather spice, water, and troops, then reveal the rest of your hand for an economic and military push. Alliances with the great factions, a hidden combat each turn, and one perfectly timed betrayal decide who claims the throne. Rich enough for veterans and it plays 1–4 with a strong solo bot.",
+            "Worker placement and deckbuilding tangled together on the sands of Arrakis. You send agents out for spice, water, and troops, then play the rest of your hand for whatever economic or military push you can manage. Alliances shift, combat resolves in secret, and someone always finds the perfect moment to betray a friend. The solo bot holds its own if you're playing alone.",
         "love-letter":
-            "A micro deduction game built from just sixteen cards. Each round you hold a single card and draw a second, playing one to knock rivals out or force them to reveal what they're holding, all to deliver your letter to the princess. Rounds last barely a couple of minutes, and the first to earn enough tokens of her affection wins. The purest, quickest filler on the shelf.",
+            "Sixteen cards, one held in hand, one drawn — that's the whole game. Play a card to knock a rival out or force a reveal, all in service of getting your letter to the princess before anyone else's. A round is over before the kettle finishes boiling. Simplest, fastest filler on the shelf.",
         "spirit-island":
-            "A heavy cooperative game where the usual roles are flipped: you are the ancient spirits of an island fighting to drive out invading colonists before they overrun the land. Each spirit wields a unique, growing deck of powers, and you must coordinate fear, blight, and destruction across the map to win. Notoriously brain-melting, endlessly variable, and the hardest box on this shelf. Plays 1–4 with plenty of difficulty dials.",
+            "You play the island's furious spirits, evicting colonizers before they overrun the land. Each spirit grows its own deck of powers, and winning means coordinating fear, blight, and destruction across the map with your fellow spirits. It's the hardest box on the shelf by a wide margin, with more difficulty dials than you'll ever need. Give it a full evening the first few times.",
         "the-chameleon":
-            "A fast social-deduction party game. Everyone shares a grid of related words and secretly knows the chosen one — except the Chameleon, who is bluffing completely blind. Each player says a single word to prove they're in the know without handing the answer to the faker, then the table votes on who the Chameleon is. Quick, funny, and made for a crowd of 3–8.",
+            "Everyone sees a grid of related words and knows which one was chosen — except the Chameleon, who's bluffing entirely in the dark. Each player offers one word that proves they're in on it without giving the answer away, then the table votes on who's faking. Quick, funny, and best with a real crowd.",
         wingspan:
-            "An elegant engine-building game about attracting birds to your network of wildlife preserves. Playing a bird into one of three habitats powers up every action in that row — gaining food, laying eggs, or drawing more birds — so your turns snowball as your reserves fill. Gorgeous art and genuinely educational bird facts make it as lovely to look at as it is to play. Everyone tends to leave calmer than they arrived; plays 1–5.",
-        anomia: "A frantic real-time party game about the word that's stuck on the tip of your tongue. Flip cards onto your pile, and the moment your symbol matches another player's, the two of you race to blurt an example from the other's category first. Simple to teach, impossible to stay quiet during, and mostly a contest of who panics best under pressure. Great with a loud group of 3–6.",
+            "You're attracting birds to a network of wildlife preserves, and every bird you place in a habitat powers up everything else in that row — food, eggs, or more birds. Turns snowball nicely as your reserves fill in. The art is gorgeous and the bird facts on each card are genuinely interesting, not just filler. People tend to leave calmer than they arrived.",
+        anomia: "Flip cards onto your own pile, and the second your symbol matches someone else's, you're both racing to blurt out an example from the other's category first. Takes thirty seconds to teach and about as long to turn into chaos. Really just a contest of who panics best under pressure.",
         "eldritch-horror":
-            "A sprawling cooperative game of globe-trotting investigators racing to stop an Ancient One from waking. You'll travel the world gathering clues, sealing gates, and fighting monsters while the doom track ticks relentlessly toward the end. Rich narrative encounters and constant setbacks turn every game into a story — a long one, so clear the whole evening. Plays 1–8.",
+            "Your investigators globe-trot to stop an Ancient One from waking, gathering clues, sealing gates, and fighting off monsters while the doom track counts down. The story encounters are genuinely good, and the setbacks keep piling on right up to the end. Clear the whole evening for this one — it doesn't move fast.",
         "one-night-werewolf":
-            "A streamlined take on Werewolf with no elimination and no drawn-out nights. Everyone receives a hidden role, a single night of secret actions scrambles who is actually who, and then one frantic round of discussion decides who to accuse before the vote. The whole thing is over in about ten minutes and nobody has to sit out. Perfect for large, chatty groups of 3–10.",
-        catan: "The modern classic of resource trading and expansion. Roll for the island's output of brick, wood, wheat, ore, and sheep, then wheel and deal with your rivals to build roads, settlements, and cities on the way to ten points. Where the robber lands and who's willing to trade with whom shape every single game. You almost certainly already know how this one ends.",
+            "One night, nobody gets eliminated, and everyone's secretly swapping and peeking at roles before a single frantic round of arguing decides the vote. Ten minutes start to finish, and nobody's stuck sitting out. Works great with a big, chatty group.",
+        catan: "Roads, sheep, and a lot of negotiation. Roll for resources, trade with whoever's willing, and build your way to ten points before anyone else. Where the robber lands and who'll actually trade with you decide more of the game than the dice do. You already know how this one goes.",
         "exploding-kittens":
-            "A quick, chaotic card game of pushing your luck. Draw cards until someone flips an exploding kitten — and unless they can play a defuse, they're out of the game. Along the way you'll skip turns, peek at the top of the deck, and shove the kitten back to detonate on somebody else. Silly, brutal, and mercifully brief; plays 2–5.",
+            "Draw cards until somebody flips an exploding kitten — no defuse card, no more turns for you. Along the way you're skipping turns, peeking at the deck, and shoving the kitten back into someone else's future. Silly, a little brutal, over quickly.",
         flamecraft:
-            "A cozy game of tiny artisan dragons keeping the shops of a charming town. Send your dragons out to gather goods and enchant storefronts, building reputation and satisfying little combos as you go. The art is adorable, the mood is gentle, and the whole thing plays like a warm hug in board-game form. Plays 1–5.",
-        avalon: "A game of hidden loyalty set in Arthurian legend. The loyal servants of Arthur try to succeed on a series of quests while Mordred's minions secretly sabotage them, and special roles like Merlin and the Assassin pile on delicious layers of who-knows-what-about-whom. Half an hour of squinting suspiciously at your friends and accusing them of treachery. Best with 5–10 players.",
-        quacks: "A push-your-luck bag-building game about brewing dubious potions. Each round you draw ingredient chips from your bag one at a time, building a bigger and bigger bubbling pot — but pull too many white cherry bombs and the whole thing blows up. Cash in your winnings for better ingredients and tune your bag for the next round. Gasps and groans are guaranteed; plays 2–4.",
+            "Tiny dragons run the shops of a very charming town, and you're sending them out to gather goods and enchant storefronts. The combos are small and satisfying, the art is adorable, and nothing about it raises your blood pressure. About as cozy as board games get.",
+        avalon: "Arthur's loyal servants try to succeed at a series of quests while Mordred's hidden minions quietly sabotage them. Roles like Merlin and the Assassin add another layer of who-knows-what-about-whom. Half an hour of squinting at your friends and accusing them of treason. Better with a bigger table.",
+        quacks: "Draw ingredient chips from your bag one at a time, building a bigger pot each round — pull too many cherry bombs, though, and it blows up in your face. Cash in whatever you've got for better ingredients and a fatter bag next round. Guaranteed gasps at the table.",
         splendor:
-            "A fast, clean engine-builder about Renaissance gem merchants. Collect chips of gems, spend them on development cards, and let those cards discount your future purchases until your economy snowballs toward fifteen prestige. It teaches in about ninety seconds and rewards greedy, efficient planning. Plays 2–4.",
+            "Collect gem chips, spend them on cards, and let those cards start discounting your future purchases until the whole thing snowballs. Teaches in about ninety seconds flat. Rewards greedy, efficient planning more than clever combos.",
         "dice-throne":
-            "A fast, combative dice game that plays like a fighting video game on the table. Each player picks an asymmetric hero with a unique board and deck, then rolls Yahtzee-style to trigger attacks, defenses, and combos aimed at dropping an opponent's health to zero. Loud, swingy, and bursting with personality. Best head-to-head or in team battles, 2–6.",
+            "Pick an asymmetric hero, then roll Yahtzee-style dice to trigger attacks, defenses, and combos aimed straight at your opponent's health bar. Plays like a fighting game got turned into cardboard. Loud, swingy, full of personality — best head-to-head.",
         codenames:
-            "A word-association party game of clever clues and agonizing near-misses. Two spymasters give one-word clues to steer their teammates toward their secret agents on a grid of words, all while dodging the assassin that ends the game on the spot. The real joy and suffering both belong to the clue-giver trying to link several words with one perfect hint. Plays 2–8 and shines with a crowd.",
+            "One-word clues from the spymaster steer your team toward the right words on the grid — while dodging the assassin that ends the game instantly if you touch it. Most of the suffering, and most of the fun, belongs to whoever's giving the clues. Shines with a bigger crowd.",
         "castles-of-burgundy":
-            "A beloved medium-heavy euro about developing your princely estate in the Loire valley. Roll two dice each turn and use them to draft tiles from the central board onto your own — animals, buildings, ships, mines, and knowledge — each scoring in its own particular way. Deceptively deep, endlessly optimizable, and a longtime favorite of serious gamers. Plays 2–4.",
+            "Roll two dice each turn and use them to draft tiles onto your own estate board — animals, buildings, ships, mines, knowledge — each scoring in its own particular way. Quietly deep and endlessly optimizable once it clicks. A longtime favorite with the serious-euro crowd for good reason.",
         "ransom-notes":
-            "A ridiculous party game of magnetic-poetry improv. Draw a hand of random word magnets, then race to answer an outlandish prompt using only the words you were dealt before the timer runs out. A rotating judge crowns the funniest submission, and grammar is very much a lost cause. Great with a big, silly group of 3–8.",
+            "Draw a hand of random word magnets, then race to answer an outlandish prompt using only what you were dealt before the timer runs out. A rotating judge picks the funniest submission each round. Grammar doesn't survive the process, but that's kind of the point.",
         wavelength:
-            "A team party game of guessing where an opinion falls on a spectrum. One player sees a hidden target on a dial between two extremes — say 'underrated' to 'overrated' — and gives a single clue to nudge teammates toward it. Cue passionate arguments about exactly how hot 'lukewarm' really is before you spin the dial to check. Plays 2–12 and makes a fantastic icebreaker.",
+            "One player sees a hidden target on a dial somewhere between two extremes — say, 'underrated' to 'overrated' — and gives a single clue to steer the team toward it. Everyone else argues about exactly where that clue lands before the dial gets revealed. Turns out to be a surprisingly great icebreaker.",
     };
 
     const TAG_LABEL = {
