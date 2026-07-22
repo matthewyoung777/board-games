@@ -1,39 +1,1057 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Board Games</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header>
-    <h1>Board Games</h1>
-    <p>A little corner of the web for the games we love.</p>
-  </header>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Our board game shelf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Karla:wght@400;500;700&family=Oswald:wght@500;600&display=swap"
+    rel="stylesheet"
+/>
+<style>
+    :root {
+        --ink: #241b33;
+        --ink-2: #2f2245;
+        --cream: #f6efe4;
+        --lilac: #b4a4cd;
+        --wood: #b0764a;
+        --wood-dark: #7e5232;
+        --wood-edge: #c98f5f;
+        --radius: 10px;
+    }
+    * {
+        box-sizing: border-box;
+    }
+    body {
+        margin: 0;
+        padding: 0 20px 72px;
+        background: var(--ink);
+        background-image:
+            radial-gradient(circle at 18% 8%, #3a2b54 0%, transparent 48%),
+            radial-gradient(circle at 88% 4%, #43305c 0%, transparent 42%);
+        background-attachment: fixed;
+        color: var(--cream);
+        font-family: "Karla", system-ui, sans-serif;
+        font-size: 16px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+    }
+    .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+    }
 
-  <main>
-    <section class="games">
-      <!-- Add game cards here -->
-      <article class="card">
-        <h2>Chess</h2>
-        <p>The classic game of strategy.</p>
-      </article>
-      <article class="card">
-        <h2>Checkers</h2>
-        <p>Simple to learn, hard to master.</p>
-      </article>
-      <article class="card">
-        <h2>Go</h2>
-        <p>Surround more territory than your opponent.</p>
-      </article>
-    </section>
-  </main>
+    header {
+        padding: 60px 0 34px;
+    }
+    .eyebrow {
+        font-family: "Oswald", sans-serif;
+        font-size: 13px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--lilac);
+        margin: 0 0 10px;
+    }
+    h1 {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: clamp(44px, 9vw, 76px);
+        line-height: 0.95;
+        margin: 0 0 14px;
+    }
+    h1 em {
+        font-style: normal;
+        color: #f2b65c;
+    }
+    .lede {
+        margin: 0;
+        max-width: 48ch;
+        color: var(--lilac);
+        font-size: 17px;
+    }
 
-  <footer>
-    <p>&copy; <span id="year"></span> board-games</p>
-  </footer>
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin: 26px 0 0;
+    }
+    .chip {
+        font:
+            500 14px/1 "Karla",
+            sans-serif;
+        color: var(--lilac);
+        background: transparent;
+        border: 1px solid #4c3a69;
+        border-radius: 999px;
+        padding: 9px 15px;
+        cursor: pointer;
+        transition:
+            background 0.18s,
+            color 0.18s,
+            border-color 0.18s;
+    }
+    .chip:hover {
+        border-color: #7c63a6;
+        color: var(--cream);
+    }
+    .chip[aria-pressed="true"] {
+        background: var(--cream);
+        border-color: var(--cream);
+        color: #2b2040;
+    }
+    .chip:focus-visible {
+        outline: 2px solid #f2b65c;
+        outline-offset: 2px;
+    }
+    .count {
+        margin: 14px 0 0;
+        font-size: 13.5px;
+        color: #8c7ba8;
+    }
 
-  <script src="script.js"></script>
-</body>
-</html>
+    .shelf-scroll {
+        margin: 36px -20px 0;
+        padding: 0 20px;
+        overflow-x: auto;
+    }
+    .shelf {
+        min-width: 900px;
+    }
+    .boxes {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 4px;
+        height: 250px;
+        padding: 0 14px;
+    }
+    .spine {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        padding: 0;
+        border-radius: 3px 3px 2px 2px;
+        cursor: pointer;
+        transform-origin: bottom center;
+        transition:
+            transform 0.22s ease,
+            opacity 0.22s ease,
+            filter 0.22s ease;
+        box-shadow:
+            inset -7px 0 12px rgba(0, 0, 0, 0.34),
+            inset 4px 0 0 rgba(255, 255, 255, 0.16),
+            0 6px 14px rgba(0, 0, 0, 0.35);
+    }
+    .spine span {
+        font-family: "Oswald", sans-serif;
+        font-weight: 600;
+        font-size: 13px;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+        color: rgba(20, 12, 32, 0.86);
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    .spine:hover,
+    .spine:focus-visible {
+        transform: translateY(-14px) rotate(-1.4deg);
+    }
+    .spine:focus-visible {
+        outline: 2px solid var(--cream);
+        outline-offset: 3px;
+    }
+    .spine.lean {
+        transform: rotate(7deg);
+    }
+    .spine.lean:hover,
+    .spine.lean:focus-visible {
+        transform: translateY(-14px) rotate(5deg);
+    }
+    .spine.dim {
+        opacity: 0.18;
+        filter: grayscale(0.7);
+    }
+
+    .plank {
+        height: 16px;
+        border-radius: 4px;
+        background: linear-gradient(
+            var(--wood-edge),
+            var(--wood) 42%,
+            var(--wood-dark)
+        );
+    }
+    .plank-shadow {
+        height: 10px;
+        margin: 0 22px;
+        border-radius: 0 0 22px 22px;
+        background: rgba(0, 0, 0, 0.3);
+        filter: blur(3px);
+    }
+    .shelf-note {
+        margin: 14px 0 0;
+        text-align: center;
+        font-size: 13px;
+        color: #8c7ba8;
+    }
+
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(232px, 1fr));
+        gap: 14px;
+        margin: 46px 0 0;
+    }
+    .card {
+        position: relative;
+        background: var(--ink-2);
+        border: 1px solid #46345f;
+        border-radius: var(--radius);
+        padding: 14px 16px 18px;
+        cursor: pointer;
+        transition:
+            transform 0.2s ease,
+            border-color 0.2s ease,
+            opacity 0.22s ease;
+    }
+    .card:hover {
+        transform: translateY(-3px);
+        border-color: #6b5492;
+    }
+    .card:focus-visible {
+        outline: 2px solid #f2b65c;
+        outline-offset: 3px;
+    }
+    .card.dim {
+        opacity: 0.26;
+    }
+    .card.flash {
+        border-color: var(--c);
+    }
+
+    .taglist {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 0 0 16px;
+    }
+    .tag {
+        font:
+            600 11px/1 "Oswald",
+            sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--lilac);
+        border: 1px solid #4c3a69;
+        border-radius: 999px;
+        padding: 5px 10px;
+    }
+    .bgg-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font:
+            700 14px "Karla",
+            sans-serif;
+        color: #f2b65c;
+        text-decoration: none;
+    }
+    .bgg-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Expanded game brought to the forefront */
+    .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        background: rgba(10, 6, 20, 0.72);
+        backdrop-filter: blur(4px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+    }
+    .modal-backdrop.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .modal {
+        position: relative;
+        width: min(460px, 100%);
+        max-height: calc(100vh - 48px);
+        overflow-y: auto;
+        background: var(--ink-2);
+        border: 1px solid #5b4780;
+        border-radius: 16px;
+        padding: 22px 24px 26px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+        transform: translateY(14px) scale(0.97);
+        transition: transform 0.28s ease;
+    }
+    .modal-backdrop.open .modal {
+        transform: none;
+    }
+    .modal .cover {
+        aspect-ratio: 1 / 1;
+        margin: 0 0 18px;
+    }
+    .modal .cover .initials {
+        font-size: 64px;
+    }
+    .modal .cover .fname {
+        font-size: 13px;
+    }
+    .modal h2 {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: 30px;
+        line-height: 1.08;
+        margin: 0 0 6px;
+    }
+    .modal .meta {
+        color: var(--c);
+        margin: 0 0 12px;
+    }
+    .modal .blurb {
+        font-size: 15px;
+        margin: 0 0 16px;
+    }
+    .modal-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 999px;
+        background: rgba(0, 0, 0, 0.4);
+        color: var(--cream);
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+        transition: background 0.18s;
+    }
+    .modal-close:hover {
+        background: rgba(0, 0, 0, 0.65);
+    }
+    .modal-close:focus-visible {
+        outline: 2px solid #f2b65c;
+        outline-offset: 2px;
+    }
+    body.modal-open {
+        overflow: hidden;
+    }
+
+    .cover {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        background: var(--c);
+        border-radius: 7px;
+        overflow: hidden;
+        margin: 0 0 13px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+    }
+    .cover .initials {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 800;
+        font-size: 36px;
+        line-height: 1;
+        color: rgba(20, 12, 32, 0.72);
+    }
+    .cover .fname {
+        font-family: "Oswald", sans-serif;
+        font-size: 10.5px;
+        letter-spacing: 0.08em;
+        color: rgba(20, 12, 32, 0.5);
+    }
+    .cover img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.35s ease;
+    }
+    .cover img.loaded {
+        opacity: 1;
+    }
+
+    .card h2 {
+        font-family: "Baloo 2", sans-serif;
+        font-weight: 600;
+        font-size: 20px;
+        line-height: 1.2;
+        margin: 0 0 5px;
+    }
+    .meta {
+        font-family: "Oswald", sans-serif;
+        font-weight: 500;
+        font-size: 12px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--c);
+        margin: 0 0 8px;
+    }
+    .blurb {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--lilac);
+    }
+
+    footer {
+        margin: 52px 0 0;
+        padding-top: 22px;
+        border-top: 1px solid #3d2d57;
+        color: #8c7ba8;
+        font-size: 14px;
+    }
+    footer b {
+        color: var(--cream);
+        font-weight: 700;
+    }
+    footer p {
+        margin: 0 0 8px;
+    }
+    footer code {
+        font-family: ui-monospace, Menlo, monospace;
+        font-size: 13px;
+        color: var(--lilac);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none !important;
+        }
+        .spine:hover,
+        .spine:focus-visible,
+        .card:hover {
+            transform: none;
+        }
+        .spine.lean:hover {
+            transform: rotate(7deg);
+        }
+    }
+    @media (max-width: 560px) {
+        header {
+            padding-top: 40px;
+        }
+        .grid {
+            margin-top: 34px;
+        }
+    }
+</style>
+
+<div class="wrap">
+    <header>
+        <p class="eyebrow">game night · twenty-one boxes</p>
+        <h1>Everything on <em>the shelf</em></h1>
+        <p class="lede">
+            Pick a box and say so in chat. Filter by what the night actually
+            looks like — twenty minutes to kill, a full evening, or nine people
+            who all showed up.
+        </p>
+
+        <div class="filters" role="group" aria-label="Filter games">
+            <button class="chip" data-filter="all" aria-pressed="true">
+                Everything
+            </button>
+            <button class="chip" data-filter="quick" aria-pressed="false">
+                30 min or less
+            </button>
+            <button class="chip" data-filter="long" aria-pressed="false">
+                45 min or more
+            </button>
+            <button class="chip" data-filter="crowd" aria-pressed="false">
+                5+ people
+            </button>
+        </div>
+        <p class="count" id="count"></p>
+    </header>
+
+    <div class="shelf-scroll">
+        <div class="shelf">
+            <div class="boxes" id="boxes"></div>
+            <div class="plank"></div>
+            <div class="plank-shadow"></div>
+            <p class="shelf-note">Tap a box to open it</p>
+        </div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <footer>
+        <p>
+            Twenty-one games, <b>1 to 12 players</b>, ten minutes to four hours.
+            Someone else is teaching the rules this time.
+        </p>
+        <p>
+            Adding photos: open this file in any text editor, find the
+            <code>COVERS</code> list near the top of the script, and paste an
+            image link next to the name printed on each tile.
+        </p>
+    </footer>
+</div>
+
+<script>
+    /* ===========================================================
+    PASTE IMAGE LINKS HERE
+    Keep the quotes. A link must end in .jpg .png .webp or .gif
+    Leave one blank and that game keeps its coloured tile.
+    =========================================================== */
+    const COVERS = {
+        "the-chameleon":
+            "https://bigpotato.com/cdn/shop/files/CHM_Main_Image.png?v=1750179006&width=1920",
+        everdell:
+            "https://tycoongames.com/cdn/shop/files/Everdell-Standard-Edition-FlatCover-_01.webp?v=1772549363&width=1445",
+        coup: "https://indieboardsandcards.com/wp-content/uploads/2019/10/Untitled-design-4.png",
+        "dune-imperium":
+            "https://www.shutupandsitdown.com/wp-content/uploads/2021/01/duneimperium.jpg",
+        "love-letter":
+            "https://raiseyourgame.com/wp-content/uploads/2024/07/Love_Letter_792x447.jpg",
+        "spirit-island":
+            "https://cf.geekdo-images.com/a13ieMPP2s0KEaKNYmtH5w__opengraph/img/0A_yzGwxraMhSkdgPWbwChQeSvE=/fit-in/1200x630/filters:strip_icc()/pic3615739.png",
+        wingspan:
+            "https://orionmagazine.org/wp-content/uploads/2023/11/faith-wingspan-featured--1554x888.jpg",
+        anomia: "https://i5.walmartimages.com/asr/3fdec4a7-e9c0-4842-aa6b-2be8bf19e30a.45df73673ce9fcffa16d1d8a03642403.png?odnHeight=768&odnWidth=768&odnBg=FFFFFF",
+        "eldritch-horror":
+            "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/4089610/582b694f1bcea665e48edbb20d02222bf7a331ec/capsule_616x353.jpg?t=1776102309",
+        "one-night-werewolf":
+            "https://beziergames.com/cdn/shop/products/ONUW_272896be-e795-4aec-9e37-ccd43ca0872d_2048x.png?v=1653932533",
+        catan: "https://catan-au.com.au/cdn/shop/files/6EBoxRender_22824_2896x.png?v=1743054797",
+        "exploding-kittens":
+            "https://sweetthrills.ca/cdn/shop/files/exploding-kittens-original-edition-7145833.png?v=1764790866",
+        flamecraft:
+            "https://www.whitegoblingames.com/wp-content/uploads/2024/07/Flamecraft_Basis_Familiespel_White-Goblin-Games.png",
+        avalon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcKib3eXc0YCH6lNwM9NOnTmY1Jy6OzLATUKtVpRB06dgYz7xZgWjoYPOl&s=10",
+        quacks: "https://cf.geekdo-images.com/3zMXvAfZbnWR2UIjbNMIYA__opengraph/img/F6StVtLNehKlbkrWLaCXqIlpaL4=/0x0:2500x2168/fit-in/1200x630/filters:fill(blur):strip_icc()/pic8780291.png",
+        splendor:
+            "https://down-ph.img.susercontent.com/file/ph-11134207-7r98z-lrwm6oydbbat5e",
+        "dice-throne":
+            "https://gugimages.s3.us-east-2.amazonaws.com/wp-content/uploads/2019/01/22022814/dice-throne-s2-featured.jpg",
+        codenames:
+            "https://timelesstoys.com/cdn/shop/files/czech-games-cooperative-games-codenames-40137223995634.jpg?v=1708204493",
+        "castles-of-burgundy":
+            "https://m.media-amazon.com/images/I/81GOUBVPusL._AC_UF894,1000_QL80_.jpg",
+        "ransom-notes":
+            "https://www.hamleys.com/media/catalog/product/r/a/ransom_notes_1011004_a.jpg?quality=80&bg-color=255,255,255&fit=bounds&height=&width=&canvas=:",
+        wavelength: "https://m.media-amazon.com/images/I/91jxT2HWS-L.jpg",
+    };
+
+    const GAMES = [
+        {
+            name: "Everdell",
+            color: "#57A46B",
+            players: "1–4",
+            time: "40–80 min",
+            w: 52,
+            h: 216,
+            tags: ["long", "solo"],
+            blurb: "Woodland critters build a little city. The giant cardboard tree does most of the convincing.",
+        },
+        {
+            name: "Coup",
+            color: "#8B98AE",
+            players: "2–6",
+            time: "15 min",
+            w: 20,
+            h: 98,
+            tags: ["quick", "crowd"],
+            blurb: "Everyone lies about which card they hold. Best filler on the shelf.",
+        },
+        {
+            name: "Dune: Imperium",
+            color: "#D08E42",
+            players: "1–4",
+            time: "60–120 min",
+            w: 46,
+            h: 200,
+            tags: ["long", "solo"],
+            blurb: "Worker placement and deckbuilding tangled together. Spice, alliances, one perfectly timed betrayal.",
+        },
+        {
+            name: "Love Letter",
+            color: "#EFB7C6",
+            players: "2–6",
+            time: "20 min",
+            w: 18,
+            h: 92,
+            tags: ["quick", "crowd"],
+            blurb: "Sixteen cards and a round of deduction. Over before the kettle finishes.",
+        },
+        {
+            name: "Spirit Island",
+            color: "#4A9682",
+            players: "1–4",
+            time: "90–120 min",
+            w: 50,
+            h: 210,
+            tags: ["long", "solo"],
+            blurb: "You are the island's furious spirits, evicting colonisers. The hardest box up here.",
+        },
+        {
+            name: "The Chameleon",
+            color: "#A8C255",
+            players: "3–8",
+            time: "15–20 min",
+            w: 24,
+            h: 116,
+            tags: ["quick", "crowd"],
+            blurb: "Everyone knows the secret word except one faker, improvising very badly.",
+        },
+        {
+            name: "Wingspan",
+            color: "#7EB0C4",
+            players: "1–5",
+            time: "40–70 min",
+            w: 44,
+            h: 198,
+            tags: ["long", "crowd", "solo"],
+            blurb: "Build habitats, lay eggs, read bird facts aloud. Everyone leaves calmer than they arrived.",
+        },
+        {
+            name: "Anomia",
+            color: "#E48EB2",
+            players: "3–6",
+            time: "30 min",
+            w: 26,
+            h: 122,
+            tags: ["quick", "crowd"],
+            blurb: "Match a symbol, shout a category answer first. Mostly a volume contest.",
+        },
+        {
+            name: "Eldritch Horror",
+            color: "#6E8A93",
+            players: "1–8",
+            time: "2–4 hours",
+            w: 54,
+            h: 220,
+            tags: ["long", "crowd", "solo"],
+            blurb: "Co-op globetrotting against an ancient horror. Clear the entire evening for it.",
+        },
+        {
+            name: "One Night Werewolf",
+            color: "#7E86C4",
+            players: "3–10",
+            time: "10 min",
+            w: 20,
+            h: 100,
+            tags: ["quick", "crowd"],
+            blurb: "One night, nobody eliminated, ten minutes of everybody lying simultaneously.",
+        },
+        {
+            name: "Catan",
+            color: "#59AEA6",
+            players: "3–4",
+            time: "60–90 min",
+            w: 48,
+            h: 212,
+            tags: ["long"],
+            blurb: "Roads, sheep, negotiation. You already know how this one ends.",
+        },
+        {
+            name: "Exploding Kittens",
+            color: "#D93E6A",
+            players: "2–5",
+            time: "15 min",
+            w: 22,
+            h: 128,
+            tags: ["quick", "crowd"],
+            blurb: "Draw cards, dodge the kitten, hoard the defuse. Chaos, but brief.",
+        },
+        {
+            name: "Flamecraft",
+            color: "#E4735F",
+            players: "1–5",
+            time: "60 min",
+            w: 44,
+            h: 192,
+            tags: ["long", "crowd", "solo"],
+            blurb: "Tiny dragons run neighbourhood shops. Cozy to the point of being a hug.",
+        },
+        {
+            name: "Avalon",
+            color: "#C05B56",
+            players: "5–10",
+            time: "30 min",
+            w: 24,
+            h: 112,
+            tags: ["quick", "crowd"],
+            blurb: "Good guys, hidden traitors, half an hour of accusing your friends of things.",
+        },
+        {
+            name: "Quacks",
+            color: "#9B6BC9",
+            players: "2–4",
+            time: "45 min",
+            w: 40,
+            h: 188,
+            tags: ["long"],
+            blurb: "Pull ingredients from a bag and stop before the pot blows. Pure push-your-luck.",
+        },
+        {
+            name: "Splendor",
+            color: "#DCC463",
+            players: "2–4",
+            time: "30 min",
+            w: 30,
+            h: 132,
+            tags: ["quick"],
+            blurb: "Collect gem chips, buy cards, watch the engine snowball. Teaches in ninety seconds.",
+        },
+        {
+            name: "Dice Throne",
+            color: "#E2622C",
+            players: "2–6",
+            time: "20–40 min",
+            w: 42,
+            h: 186,
+            tags: ["quick", "crowd"],
+            blurb: "Pick a fighter, roll for combos, knock your opponent's health to zero.",
+        },
+        {
+            name: "Codenames",
+            color: "#C7A87A",
+            players: "2–8",
+            time: "15 min",
+            w: 34,
+            h: 150,
+            tags: ["quick", "crowd"],
+            blurb: "One-word clues for your team's agents. The clue-giver suffers the most.",
+        },
+        {
+            name: "Castles of Burgundy",
+            color: "#5D93D6",
+            players: "2–4",
+            time: "90 min",
+            w: 40,
+            h: 178,
+            tags: ["long"],
+            zoom: 1.12,
+            blurb: "Roll dice, place tiles, quietly optimise for an hour and a half. The heavy euro.",
+        },
+        {
+            name: "Ransom Notes",
+            color: "#D9D3C4",
+            players: "3–8",
+            time: "30 min",
+            w: 36,
+            h: 158,
+            tags: ["quick", "crowd"],
+            blurb: "Answer the prompt using magnetic word tiles. Grammar is a lost cause.",
+        },
+        {
+            name: "Wavelength",
+            color: "#3FA9C9",
+            players: "2–12",
+            time: "30–45 min",
+            w: 38,
+            h: 168,
+            tags: ["quick", "crowd"],
+            blurb: "Where does 'hot' land between cold and scorching? Argue, then spin the dial.",
+        },
+    ];
+
+    GAMES.sort(function (a, b) {
+        return a.name.localeCompare(b.name);
+    });
+
+    /* BoardGameGeek page for each game, keyed by slug. */
+    const BGG = {
+        everdell: "https://boardgamegeek.com/boardgame/199792/everdell",
+        coup: "https://boardgamegeek.com/boardgame/131357/coup",
+        "dune-imperium":
+            "https://boardgamegeek.com/boardgame/316554/dune-imperium",
+        "love-letter": "https://boardgamegeek.com/boardgame/129622/love-letter",
+        "spirit-island":
+            "https://boardgamegeek.com/boardgame/162886/spirit-island",
+        "the-chameleon":
+            "https://boardgamegeek.com/boardgame/227072/the-chameleon",
+        wingspan: "https://boardgamegeek.com/boardgame/266192/wingspan",
+        anomia: "https://boardgamegeek.com/boardgame/67877/anomia",
+        "eldritch-horror":
+            "https://boardgamegeek.com/boardgame/146021/eldritch-horror",
+        "one-night-werewolf":
+            "https://boardgamegeek.com/boardgame/147949/one-night-ultimate-werewolf",
+        catan: "https://boardgamegeek.com/boardgame/13/catan",
+        "exploding-kittens":
+            "https://boardgamegeek.com/boardgame/172225/exploding-kittens",
+        flamecraft: "https://boardgamegeek.com/boardgame/336986/flamecraft",
+        avalon: "https://boardgamegeek.com/boardgame/128882/the-resistance-avalon",
+        quacks: "https://boardgamegeek.com/boardgame/244521/quacks",
+        splendor: "https://boardgamegeek.com/boardgame/148228/splendor",
+        "dice-throne":
+            "https://boardgamegeek.com/boardgame/216734/dice-throne-season-one",
+        codenames: "https://boardgamegeek.com/boardgame/178900/codenames",
+        "castles-of-burgundy":
+            "https://boardgamegeek.com/boardgame/84876/castles-burgundy",
+        "ransom-notes":
+            "https://boardgamegeek.com/boardgame/349812/ransom-notes",
+        wavelength: "https://boardgamegeek.com/boardgame/262543/wavelength",
+    };
+
+    /* Longer descriptions shown in the expanded view, keyed by slug. */
+    const LONG = {
+        everdell:
+            "A worker-placement and tableau-building game set in the forested valley of Everdell. Across four seasons you send woodland critters out to gather twigs, resin, pebbles, and berries, then spend them to raise constructions and welcome new critters to your ever-growing city. Clever card combinations let a single turn cascade into many, all beneath the famous three-dimensional Evertree. Plays 1–4 and scales down to a tense solo puzzle.",
+        coup: "A razor-sharp game of bluff and deduction set in the dystopian Resistance universe. Everyone starts with two hidden character cards and two coins, and on your turn you may claim any character's power — whether or not you actually hold it — daring the table to call you out. Get caught in a lie and you lose an influence; challenge someone wrongly and you lose one yourself. The last player with a card standing wins, usually inside fifteen loud minutes.",
+        "dune-imperium":
+            "A blend of worker placement and deckbuilding set on the desert planet Arrakis. Each round you send agents to board spaces to gather spice, water, and troops, then reveal the rest of your hand for an economic and military push. Alliances with the great factions, a hidden combat each turn, and one perfectly timed betrayal decide who claims the throne. Rich enough for veterans and it plays 1–4 with a strong solo bot.",
+        "love-letter":
+            "A micro deduction game built from just sixteen cards. Each round you hold a single card and draw a second, playing one to knock rivals out or force them to reveal what they're holding, all to deliver your letter to the princess. Rounds last barely a couple of minutes, and the first to earn enough tokens of her affection wins. The purest, quickest filler on the shelf.",
+        "spirit-island":
+            "A heavy cooperative game where the usual roles are flipped: you are the ancient spirits of an island fighting to drive out invading colonists before they overrun the land. Each spirit wields a unique, growing deck of powers, and you must coordinate fear, blight, and destruction across the map to win. Notoriously brain-melting, endlessly variable, and the hardest box on this shelf. Plays 1–4 with plenty of difficulty dials.",
+        "the-chameleon":
+            "A fast social-deduction party game. Everyone shares a grid of related words and secretly knows the chosen one — except the Chameleon, who is bluffing completely blind. Each player says a single word to prove they're in the know without handing the answer to the faker, then the table votes on who the Chameleon is. Quick, funny, and made for a crowd of 3–8.",
+        wingspan:
+            "An elegant engine-building game about attracting birds to your network of wildlife preserves. Playing a bird into one of three habitats powers up every action in that row — gaining food, laying eggs, or drawing more birds — so your turns snowball as your reserves fill. Gorgeous art and genuinely educational bird facts make it as lovely to look at as it is to play. Everyone tends to leave calmer than they arrived; plays 1–5.",
+        anomia: "A frantic real-time party game about the word that's stuck on the tip of your tongue. Flip cards onto your pile, and the moment your symbol matches another player's, the two of you race to blurt an example from the other's category first. Simple to teach, impossible to stay quiet during, and mostly a contest of who panics best under pressure. Great with a loud group of 3–6.",
+        "eldritch-horror":
+            "A sprawling cooperative game of globe-trotting investigators racing to stop an Ancient One from waking. You'll travel the world gathering clues, sealing gates, and fighting monsters while the doom track ticks relentlessly toward the end. Rich narrative encounters and constant setbacks turn every game into a story — a long one, so clear the whole evening. Plays 1–8.",
+        "one-night-werewolf":
+            "A streamlined take on Werewolf with no elimination and no drawn-out nights. Everyone receives a hidden role, a single night of secret actions scrambles who is actually who, and then one frantic round of discussion decides who to accuse before the vote. The whole thing is over in about ten minutes and nobody has to sit out. Perfect for large, chatty groups of 3–10.",
+        catan: "The modern classic of resource trading and expansion. Roll for the island's output of brick, wood, wheat, ore, and sheep, then wheel and deal with your rivals to build roads, settlements, and cities on the way to ten points. Where the robber lands and who's willing to trade with whom shape every single game. You almost certainly already know how this one ends.",
+        "exploding-kittens":
+            "A quick, chaotic card game of pushing your luck. Draw cards until someone flips an exploding kitten — and unless they can play a defuse, they're out of the game. Along the way you'll skip turns, peek at the top of the deck, and shove the kitten back to detonate on somebody else. Silly, brutal, and mercifully brief; plays 2–5.",
+        flamecraft:
+            "A cozy game of tiny artisan dragons keeping the shops of a charming town. Send your dragons out to gather goods and enchant storefronts, building reputation and satisfying little combos as you go. The art is adorable, the mood is gentle, and the whole thing plays like a warm hug in board-game form. Plays 1–5.",
+        avalon: "A game of hidden loyalty set in Arthurian legend. The loyal servants of Arthur try to succeed on a series of quests while Mordred's minions secretly sabotage them, and special roles like Merlin and the Assassin pile on delicious layers of who-knows-what-about-whom. Half an hour of squinting suspiciously at your friends and accusing them of treachery. Best with 5–10 players.",
+        quacks: "A push-your-luck bag-building game about brewing dubious potions. Each round you draw ingredient chips from your bag one at a time, building a bigger and bigger bubbling pot — but pull too many white cherry bombs and the whole thing blows up. Cash in your winnings for better ingredients and tune your bag for the next round. Gasps and groans are guaranteed; plays 2–4.",
+        splendor:
+            "A fast, clean engine-builder about Renaissance gem merchants. Collect chips of gems, spend them on development cards, and let those cards discount your future purchases until your economy snowballs toward fifteen prestige. It teaches in about ninety seconds and rewards greedy, efficient planning. Plays 2–4.",
+        "dice-throne":
+            "A fast, combative dice game that plays like a fighting video game on the table. Each player picks an asymmetric hero with a unique board and deck, then rolls Yahtzee-style to trigger attacks, defenses, and combos aimed at dropping an opponent's health to zero. Loud, swingy, and bursting with personality. Best head-to-head or in team battles, 2–6.",
+        codenames:
+            "A word-association party game of clever clues and agonizing near-misses. Two spymasters give one-word clues to steer their teammates toward their secret agents on a grid of words, all while dodging the assassin that ends the game on the spot. The real joy and suffering both belong to the clue-giver trying to link several words with one perfect hint. Plays 2–8 and shines with a crowd.",
+        "castles-of-burgundy":
+            "A beloved medium-heavy euro about developing your princely estate in the Loire valley. Roll two dice each turn and use them to draft tiles from the central board onto your own — animals, buildings, ships, mines, and knowledge — each scoring in its own particular way. Deceptively deep, endlessly optimizable, and a longtime favorite of serious gamers. Plays 2–4.",
+        "ransom-notes":
+            "A ridiculous party game of magnetic-poetry improv. Draw a hand of random word magnets, then race to answer an outlandish prompt using only the words you were dealt before the timer runs out. A rotating judge crowns the funniest submission, and grammar is very much a lost cause. Great with a big, silly group of 3–8.",
+        wavelength:
+            "A team party game of guessing where an opinion falls on a spectrum. One player sees a hidden target on a dial between two extremes — say 'underrated' to 'overrated' — and gives a single clue to nudge teammates toward it. Cue passionate arguments about exactly how hot 'lukewarm' really is before you spin the dial to check. Plays 2–12 and makes a fantastic icebreaker.",
+    };
+
+    const TAG_LABEL = {
+        quick: "30 min or less",
+        long: "45 min or more",
+        crowd: "5+ players",
+    };
+
+    const EXT = [".jpg", ".png", ".webp", ".jpeg"];
+
+    function slugify(s) {
+        return s
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, "");
+    }
+    function initialsOf(name) {
+        const words = name
+            .replace(/[^A-Za-z0-9 ]/g, "")
+            .split(" ")
+            .filter(Boolean);
+        return (
+            words.length > 1 ? words[0][0] + words[1][0] : name.slice(0, 2)
+        ).toUpperCase();
+    }
+
+    const boxes = document.getElementById("boxes");
+    const grid = document.getElementById("grid");
+    const count = document.getElementById("count");
+
+    /* One modal reused for every game — brings the picked box to the front. */
+    const backdrop = document.createElement("div");
+    backdrop.className = "modal-backdrop";
+    backdrop.innerHTML =
+        "<div class='modal' role='dialog' aria-modal='true' aria-labelledby='modal-title'>" +
+        "<button class='modal-close' aria-label='Close'>×</button>" +
+        "<div class='modal-body'></div>" +
+        "</div>";
+    document.body.appendChild(backdrop);
+    const modal = backdrop.querySelector(".modal");
+    const modalBody = backdrop.querySelector(".modal-body");
+    const modalClose = backdrop.querySelector(".modal-close");
+    let lastFocus = null;
+
+    function openModal(g, card) {
+        const gslug = slugify(g.name);
+        const bgg = BGG[gslug] || "";
+        const desc = LONG[gslug] || g.blurb;
+        const tagChips = g.tags
+            .filter(function (t) {
+                return t !== "solo";
+            })
+            .map(function (t) {
+                return "<span class='tag'>" + (TAG_LABEL[t] || t) + "</span>";
+            })
+            .join("");
+        const bggLink = bgg
+            ? "<a class='bgg-link' href='" +
+              bgg +
+              "' target='_blank' rel='noopener noreferrer'>View on BoardGameGeek ↗</a>"
+            : "";
+        modal.style.setProperty("--c", g.color);
+        modalBody.innerHTML =
+            "<h2 id='modal-title'>" +
+            g.name +
+            "</h2>" +
+            "<p class='meta'>" +
+            g.players +
+            " players · " +
+            g.time +
+            "</p>" +
+            "<p class='blurb'>" +
+            desc +
+            "</p>" +
+            "<div class='taglist'>" +
+            tagChips +
+            "</div>" +
+            bggLink;
+        // Reuse the card's cover so an already-loaded image carries over.
+        const cover = card.querySelector(".cover").cloneNode(true);
+        modalBody.insertBefore(cover, modalBody.firstChild);
+        backdrop.classList.add("open");
+        document.body.classList.add("modal-open");
+        modalBody.scrollTop = 0;
+        modal.scrollTop = 0;
+        lastFocus = document.activeElement;
+        modalClose.focus();
+    }
+
+    function closeModal() {
+        backdrop.classList.remove("open");
+        document.body.classList.remove("modal-open");
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+    }
+
+    modalClose.addEventListener("click", closeModal);
+    backdrop.addEventListener("click", function (e) {
+        if (e.target === backdrop) closeModal();
+    });
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && backdrop.classList.contains("open"))
+            closeModal();
+    });
+
+    GAMES.forEach(function (g, i) {
+        const id = "g" + i;
+        const slug = slugify(g.name);
+
+        const b = document.createElement("button");
+        b.className = "spine" + (i === 3 ? " lean" : "");
+        b.style.cssText =
+            "width:" + g.w + "px;height:" + g.h + "px;background:" + g.color;
+        b.dataset.tags = g.tags.join(" ");
+        b.setAttribute("aria-label", g.name);
+        b.innerHTML = "<span>" + g.name + "</span>";
+        b.addEventListener("click", function () {
+            openModal(g, c);
+        });
+        boxes.appendChild(b);
+
+        const c = document.createElement("article");
+        c.className = "card";
+        c.id = id;
+        c.style.setProperty("--c", g.color);
+        c.dataset.tags = g.tags.join(" ");
+        c.tabIndex = 0;
+        c.setAttribute("role", "button");
+        c.setAttribute("aria-haspopup", "dialog");
+
+        c.innerHTML =
+            "<div class='cover'>" +
+            "<span class='initials'>" +
+            initialsOf(g.name) +
+            "</span>" +
+            "<span class='fname'>" +
+            slug +
+            "</span>" +
+            "</div>" +
+            "<h2>" +
+            g.name +
+            "</h2>" +
+            "<p class='meta'>" +
+            g.players +
+            " players · " +
+            g.time +
+            "</p>" +
+            "<p class='blurb'>" +
+            g.blurb +
+            "</p>";
+
+        c.addEventListener("click", function () {
+            openModal(g, c);
+        });
+        c.addEventListener("keydown", function (e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openModal(g, c);
+            }
+        });
+
+        grid.appendChild(c);
+
+        const url = (COVERS[slug] || "").trim();
+        const sources = url
+            ? [url]
+            : EXT.map(function (e) {
+                  return "covers/" + slug + e;
+              });
+
+        const img = document.createElement("img");
+        img.alt = "";
+        img.loading = "lazy";
+        img.referrerPolicy = "no-referrer";
+        let n = 0;
+        img.addEventListener("load", function () {
+            img.classList.add("loaded");
+        });
+        img.addEventListener("error", function () {
+            n++;
+            if (n < sources.length) img.src = sources[n];
+            else img.remove();
+        });
+        if (g.zoom) img.style.transform = "scale(" + g.zoom + ")";
+        img.src = sources[0];
+        c.querySelector(".cover").appendChild(img);
+    });
+
+    function apply(f) {
+        let n = 0;
+        document.querySelectorAll(".spine, .card").forEach(function (el) {
+            const match =
+                f === "all" || el.dataset.tags.split(" ").indexOf(f) > -1;
+            el.classList.toggle("dim", !match);
+            if (match && el.classList.contains("card")) n++;
+        });
+        count.textContent =
+            f === "all"
+                ? "Showing all 21 games"
+                : n + (n === 1 ? " game fits" : " games fit") + " that";
+    }
+
+    document.querySelectorAll(".chip").forEach(function (chip) {
+        chip.addEventListener("click", function () {
+            document.querySelectorAll(".chip").forEach(function (c) {
+                c.setAttribute("aria-pressed", String(c === chip));
+            });
+            apply(chip.dataset.filter);
+        });
+    });
+
+    apply("all");
+</script>
