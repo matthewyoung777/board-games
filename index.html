@@ -6,12 +6,15 @@
      absolute URL. If you host this somewhere, set og:url to that address. -->
 <meta name="theme-color" content="#241b33" />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="https://matthewyoung777.github.io/board-games/" />
+<meta
+    property="og:url"
+    content="https://matthewyoung777.github.io/board-games/"
+/>
 <meta property="og:site_name" content="Game night" />
 <meta property="og:title" content="Everything on the shelf" />
 <meta
     property="og:description"
-    content="Twenty-one board games, 1 to 12 players, ten minutes to four hours. Filter by length, group size, co-op vs competitive, and complexity — then pick a box."
+    content="Twenty-five board games, 1 to 12 players, ten minutes to four hours. Filter by length, group size, co-op vs competitive, and complexity — then pick a box."
 />
 <meta
     property="og:image"
@@ -21,7 +24,7 @@
 <meta name="twitter:title" content="Everything on the shelf" />
 <meta
     name="twitter:description"
-    content="Twenty-one board games. Filter by length, group size, co-op vs competitive, and complexity."
+    content="Twenty-five board games. Filter by length, group size, co-op vs competitive, and complexity."
 />
 <meta
     name="twitter:image"
@@ -381,7 +384,9 @@
         line-height: 1;
         cursor: pointer;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.45);
-        transition: background 0.18s, border-color 0.18s;
+        transition:
+            background 0.18s,
+            border-color 0.18s;
     }
     .modal-close:hover {
         background: rgba(0, 0, 0, 0.9);
@@ -687,6 +692,12 @@
         "ransom-notes":
             "https://www.hamleys.com/media/catalog/product/r/a/ransom_notes_1011004_a.jpg?quality=80&bg-color=255,255,255&fit=bounds&height=&width=&canvas=:",
         wavelength: "https://m.media-amazon.com/images/I/91jxT2HWS-L.jpg",
+        "red-rising":
+            "https://m.media-amazon.com/images/I/81t6LWPW0mL._AC_SL1500_.jpg",
+        scythe: "https://scytheboardgame.com/ws/media-library/4d37bebc81d7b9d29bde2274ccd2b719/scythe-basic-view.jpg",
+        "fate-of-the-fellowship":
+            "https://cf.geekdo-images.com/scw36iBIad7l-rGzxPGcGg__original/img/JZKAg-ETtE7z3YbgSMPd242rCqE=/0x0/filters:format(png)/pic8662670.png",
+        dnup: "https://static.wixstatic.com/media/9b81af_e69f022e0b824f9d8fa216ccf150f690~mv2.webp/v1/fill/w_980,h_980,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/9b81af_e69f022e0b824f9d8fa216ccf150f690~mv2.webp",
     };
 
     const GAMES = [
@@ -901,6 +912,46 @@
             tags: ["quick", "crowd"],
             blurb: "Where does 'hot' land between cold and scorching? Argue, then spin the dial.",
         },
+        {
+            name: "Red Rising",
+            color: "#C13B3B",
+            players: "1–6",
+            time: "45–60 min",
+            w: 40,
+            h: 178,
+            tags: ["long", "crowd", "solo"],
+            blurb: "Play cards to climb a brutal sci-fi hierarchy. Fast, mean, and all about timing your reveals.",
+        },
+        {
+            name: "Scythe",
+            color: "#6E7B4E",
+            players: "1–5",
+            time: "90–115 min",
+            w: 50,
+            h: 214,
+            tags: ["long", "crowd", "solo"],
+            blurb: "Alternate-1920s Eastern Europe with mechs. Build an engine, grab territory, rarely actually fight.",
+        },
+        {
+            name: "Fate of the Fellowship",
+            color: "#5E8C6A",
+            players: "1–4",
+            time: "60–120 min",
+            w: 46,
+            h: 200,
+            tags: ["long", "solo"],
+            blurb: "A co-op trek to Mordor. The whole table sweats the Ring together, right to the last roll.",
+        },
+        {
+            name: "DNUP",
+            color: "#5AA0A8",
+            players: "2–5",
+            time: "30 min",
+            w: 24,
+            h: 118,
+            tags: ["quick", "crowd"],
+            blurb: "Empty your hand first. Play, stack, and swipe number cards — but watch who gets forced to flip theirs and take them back.",
+        },
     ];
 
     GAMES.sort(function (a, b) {
@@ -931,6 +982,10 @@
         "castles-of-burgundy": "heavy",
         "ransom-notes": "light",
         wavelength: "light",
+        "red-rising": "medium",
+        scythe: "heavy",
+        "fate-of-the-fellowship": "heavy",
+        dnup: "light",
     };
     const MODE = {
         "spirit-island": "coop",
@@ -939,6 +994,7 @@
         codenames: "coop",
         wavelength: "coop",
         "the-chameleon": "coop",
+        "fate-of-the-fellowship": "coop",
     };
     GAMES.forEach(function (g) {
         const s = slugify(g.name);
@@ -978,6 +1034,8 @@
         "ransom-notes":
             "https://boardgamegeek.com/boardgame/349812/ransom-notes",
         wavelength: "https://boardgamegeek.com/boardgame/262543/wavelength",
+        "red-rising": "https://boardgamegeek.com/boardgame/299659/red-rising",
+        scythe: "https://boardgamegeek.com/boardgame/169786/scythe",
     };
 
     /* Longer descriptions shown in the expanded view, keyed by slug. */
@@ -1019,6 +1077,10 @@
             "Draw a hand of random word magnets, then race to answer an outlandish prompt using only what you were dealt before the timer runs out. A rotating judge picks the funniest submission each round. Grammar doesn't survive the process, but that's kind of the point.",
         wavelength:
             "One player sees a hidden target on a dial somewhere between two extremes — say, 'underrated' to 'overrated' — and gives a single clue to steer the team toward it. Everyone else argues about exactly where that clue lands before the dial gets revealed. Turns out to be a surprisingly great icebreaker.",
+        "red-rising":
+            "Set in the dystopian sci-fi world of Pierce Brown's novels, you're playing cards from a shared deck to build the strongest position in a rigid color-caste society. Hand management is everything: each card does something when played and scores differently at the end, so timing your reveals and knowing when to grab from the market matters more than raw luck. Quick and cutthroat, with a solo Automa mode if you're on your own.",
+        scythe: "Alternate-history 1920s Eastern Europe, where factions send mechs across a shared map to claim territory, resources, and glory. It looks like a war game but it's really an engine builder — combat is rare and expensive, and most of your energy goes into upgrading your economy and hitting your objectives first. Deep and beautifully produced, on the heavier end of the shelf. The Automa solo opponent is one of the best around.",
+        dnup: "A sharp little hand-shedding card game where every card shows one number at the top and another at the bottom, and your goal is simply to empty your hand first. On your turn you play sets, quietly add a card to someone else's pile, or scoop cards up — and any of it can force another player to flip their cards over and take them back into their hand. Rotating your whole hand to swap which numbers are live adds a nice twist. First to empty out banks points; play to four.",
     };
 
     const TAG_LABEL = {
